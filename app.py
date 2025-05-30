@@ -18,7 +18,6 @@ legacy_amt = st.number_input("Desired Inheritance (₹)", value=1000000)
 
 # --- Compute Button ---
 if st.button("💡 Compute"):
-
     # --- Calculations ---
     years_to_ret = ret_age - curr_age
     years_after_ret = life_exp - ret_age
@@ -52,9 +51,8 @@ if st.button("💡 Compute"):
     legacy_sip = legacy_amt * monthly_rate / (((1 + monthly_rate) ** months - 1) * (1 + monthly_rate))
 
     # --- Display the Summary Message ---
-       st.markdown("---")
+    st.markdown("---")
     st.subheader("📋 Retirement Plan Summary")
-    
     st.markdown(
         f"Your current expenses of Rs. **{monthly_exp * 12:,.0f}** will be Rs. **{annual_expense_retirement:,.0f}** "
         f"at an inflation (%) of **{inflation:.2f}** after **{years_to_ret}** years.\n\n"
