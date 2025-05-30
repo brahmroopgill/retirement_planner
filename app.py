@@ -52,16 +52,18 @@ if st.button("💡 Compute"):
     legacy_sip = legacy_amt * monthly_rate / (((1 + monthly_rate) ** months - 1) * (1 + monthly_rate))
 
     # --- Display the Summary Message ---
-    st.markdown("---")
+       st.markdown("---")
     st.subheader("📋 Retirement Plan Summary")
-    st.markdown(f"""
-    Your current expenses of Rs. **{monthly_exp * 12:,.0f}** will be Rs. **{annual_expense_retirement:,.0f}**
-    at an inflation (%) of **{inflation}** after **{years_to_ret}** years.  
-    To meet these expenses and maintain your current standard of living,  
-    you will need to accumulate a corpus of Rs. **{corpus_required:,.0f}**
     
-    For this, you need to invest:  
-    - A **lumpsum** amount of Rs. **{lumpsum:,.0f}**  
-    - Or start an **SIP** of Rs. **{sip:,.0f}** per month for the next **{years_to_ret}** years at **{pre_ret_return}%** CAGR
-
-    What's more, you can leave an inheritance of Rs. **{legacy_amt:,.0f}** b**_**
+    st.markdown(
+        f"Your current expenses of Rs. **{monthly_exp * 12:,.0f}** will be Rs. **{annual_expense_retirement:,.0f}** "
+        f"at an inflation (%) of **{inflation:.2f}** after **{years_to_ret}** years.\n\n"
+        f"To meet these expenses and maintain your current standard of living, you will need to accumulate a corpus of "
+        f"Rs. **{corpus_required:,.0f}**\n\n"
+        f"For this, you need to invest:\n"
+        f"- A **lumpsum** amount of Rs. **{lumpsum:,.0f}**\n"
+        f"- Or start an **SIP** of Rs. **{sip:,.0f}** per month for the next **{years_to_ret}** years at **{pre_ret_return}%** CAGR\n\n"
+        f"What's more, you can leave an inheritance of Rs. **{legacy_amt:,.0f}** by investing:\n"
+        f"- An additional **lumpsum** of Rs. **{legacy_lumpsum:,.0f}**\n"
+        f"- Or an **SIP** of Rs. **{legacy_sip:,.0f}** per month"
+    )
