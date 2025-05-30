@@ -13,6 +13,8 @@ inflation = st.number_input("Expected Inflation Rate (% p.a.)", min_value=0.0, m
 pre_ret_return = st.number_input("Return Before Financial Independence (% p.a.)", min_value=0.0, max_value=30.0, value=15.0, format="%.2f")
 post_ret_return = st.number_input("Return After Financial Independence (% p.a.)", min_value=0.0, max_value=20.0, value=10.0, format="%.2f")
 existing_return = st.number_input("Return on Existing Investments (% p.a.)", min_value=0.0, max_value=30.0, value=12.0, format="%.2f")
+existing_return = st.number_input("Return on Existing Investments (% p.a.)", min_value=0.0, max_value=30.0, value=12.0, format="%.2f")
+
 
 monthly_exp = st.number_input("Current Monthly Expenses (Rs.)", min_value=0, value=30000, step=1000)
 current_inv = st.number_input("Current Investments (Rs.)", min_value=0, value=100000, step=1000)
