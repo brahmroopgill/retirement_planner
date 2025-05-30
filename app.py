@@ -11,9 +11,9 @@ ret_age = st.number_input("Retirement Age", min_value=curr_age+1, value=60)
 life_exp = st.number_input("Life Expectancy", min_value=ret_age+1, value=100)
 
 monthly_exp = st.number_input("Current Monthly Expenses (₹)", value=50000)
-inflation = st.slider("Expected Inflation (% per annum)", 0.0, 15.0, 4.0)
-pre_ret_return = st.slider("Returns Before Retirement (% p.a.)", 0.0, 20.0, 10.0)
-post_ret_return = st.slider("Returns After Retirement (% p.a.)", 0.0, 20.0, 6.0)
+inflation = st.number_input("Expected Inflation (% per annum)", value=4.0, format="%.2f")
+pre_ret_return = st.number_input("Returns Before Retirement (% p.a.)", value=10.0, format="%.2f")
+post_ret_return = st.number_input("Returns After Retirement (% p.a.)", value=6.0, format="%.2f")
 curr_inv = st.number_input("Current Investments (₹)", value=100000)
 legacy_amt = st.number_input("Desired Inheritance (₹)", value=1000000)
 
