@@ -1,53 +1,67 @@
 import streamlit as st
 
-# Title
 st.title("🧮 Retirement & Legacy Planner")
 
-# --- User Inputs ---
+# --- Input Section ---
 st.header("Enter Your Details")
 
 curr_age = st.number_input("Current Age", min_value=0, value=40)
-ret_age = st.number_input("Retirement Age", min_value=curr_age+1, value=60)
-life_exp = st.number_input("Life Expectancy", min_value=ret_age+1, value=100)
+ret_age = st.number_input("Retirement Age", min_value=curr_age + 1, value=60)
+life_exp = st.number_input("Life Expectancy", min_value=ret_age + 1, value=100)
 
 monthly_exp = st.number_input("Current Monthly Expenses (₹)", value=50000)
-inflation = st.number_input("Expected Inflation (% per annum)", value=4.0, format="%.2f")
-pre_ret_return = st.number_input("Returns Before Retirement (% p.a.)", value=10.0, format="%.2f")
+inflation = st.number_input("Expected Inflation (% per annum)", value=6.0, format="%.2f")
+pre_ret_return = st.number_input("Returns Before Retirement (% p.a.)", value=20.0, format="%.2f")
 post_ret_return = st.number_input("Returns After Retirement (% p.a.)", value=6.0, format="%.2f")
 curr_inv = st.number_input("Current Investments (₹)", value=100000)
 legacy_amt = st.number_input("Desired Inheritance (₹)", value=1000000)
 
-# --- Calculations ---
-years_to_ret = ret_age - curr_age
-years_after_ret = life_exp - ret_age
-annual_expense_retirement = monthly_exp * 12 * ((1 + inflation / 100) ** years_to_ret)
+# --- Compute Button ---
+if st.button("💡 Compute"):
 
-# Corpus required using present value of growing annuity formula
-net_ret_rate = (1 + post_ret_return / 100) / (1 + inflation / 100) - 1
-if net_ret_rate > 0:
-    corpus_required = annual_expense_retirement * ((1 - (1 + net_ret_rate) ** -years_after_ret) / net_ret_rate)
-else:
-    corpus_required = annual_expense_retirement * years_after_ret  # fallback
+    # --- Calculations ---
+    years_to_ret = ret_age - curr_age
+    years_after_ret = life_exp - ret_age
+    annual_expense_retirement = monthly_exp * 12 * ((1 + inflation / 100) ** years_to_ret)
 
-# Add legacy
-corpus_total = corpus_required + legacy_amt
+    # Corpus required using present value of growing annuity formula
+    net_ret_rate = (1 + post_ret_return / 100) / (1 + inflation / 100) - 1
+    if net_ret_rate > 0:
+        corpus_required = annual_expense_retirement * ((1 - (1 + net_ret_rate) ** -years_after_ret) / net_ret_rate)
+    else:
+        corpus_required = annual_expense_retirement * years_after_ret
 
-# SIP Calculation
-monthly_rate = (1 + pre_ret_return / 100) ** (1/12) - 1
-months = years_to_ret * 12
-future_value = corpus_total
+    # Add legacy
+    corpus_total = corpus_required + legacy_amt
 
-# SIP Formula: FV = SIP * [((1 + r)^n - 1) / r] * (1 + r)
-sip = future_value * monthly_rate / (((1 + monthly_rate) ** months - 1) * (1 + monthly_rate))
+    # SIP Calculation
+    monthly_rate = (1 + pre_ret_return / 100) ** (1 / 12) - 1
+    months = years_to_ret * 12
+    future_value = corpus_total
 
-# Lumpsum Formula: FV = PV * (1 + r)^n => PV = FV / (1 + r)^n
-lumpsum = future_value / ((1 + pre_ret_return / 100) ** years_to_ret)
+    if monthly_rate > 0:
+        sip = future_value * monthly_rate / (((1 + monthly_rate) ** months - 1) * (1 + monthly_rate))
+    else:
+        sip = future_value / months
 
-# --- Output Section ---
-st.header("📊 Results")
+    # Lumpsum Formula
+    lumpsum = future_value / ((1 + pre_ret_return / 100) ** years_to_ret)
 
-st.metric("Annual Expense at Retirement (₹)", f"{annual_expense_retirement:,.0f}")
-st.metric("Corpus Required at Retirement (₹)", f"{corpus_required:,.0f}")
-st.metric("Total Corpus (with Legacy) (₹)", f"{corpus_total:,.0f}")
-st.metric("Monthly SIP Required (₹)", f"{sip:,.0f}")
-st.metric("Lumpsum Investment Today (₹)", f"{lumpsum:,.0f}")
+    # Legacy portion
+    legacy_lumpsum = legacy_amt / ((1 + pre_ret_return / 100) ** years_to_ret)
+    legacy_sip = legacy_amt * monthly_rate / (((1 + monthly_rate) ** months - 1) * (1 + monthly_rate))
+
+    # --- Display the Summary Message ---
+    st.markdown("---")
+    st.subheader("📋 Retirement Plan Summary")
+    st.markdown(f"""
+    Your current expenses of Rs. **{monthly_exp * 12:,.0f}** will be Rs. **{annual_expense_retirement:,.0f}**
+    at an inflation (%) of **{inflation}** after **{years_to_ret}** years.  
+    To meet these expenses and maintain your current standard of living,  
+    you will need to accumulate a corpus of Rs. **{corpus_required:,.0f}**
+    
+    For this, you need to invest:  
+    - A **lumpsum** amount of Rs. **{lumpsum:,.0f}**  
+    - Or start an **SIP** of Rs. **{sip:,.0f}** per month for the next **{years_to_ret}** years at **{pre_ret_return}%** CAGR
+
+    What's more, you can leave an inheritance of Rs. **{legacy_amt:,.0f}** b**_**
